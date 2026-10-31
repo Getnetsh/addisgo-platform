@@ -1,0 +1,20 @@
+node_modules/
+.next/
+.expo/
+dist/
+
+# Environment files and local credentials
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+credentials.json
+service-account*.json
+
+*.log

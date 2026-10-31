@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #102a24;
+  --muted: #62746e;
+  --paper: #f7f7f1;
+  --cream: #fffdf6;
+  --line: #dce3d9;
+  --green: #12634f;
+  --green-dark: #0a4c3c;
+  --gold: #f1bd3d;
+  --orange: #e66d32;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button, input { font: inherit; }
+button { cursor: pointer; }
+.page-shell { overflow: hidden; }
+.content-width { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+.hero-glow { background: radial-gradient(circle at 79% 14%, rgba(244, 196, 67, .25), transparent 27%), radial-gradient(circle at 100% 68%, rgba(107, 204, 157, .2), transparent 29%), linear-gradient(132deg, #0a4c3c 0%, #12634f 59%, #167b60 100%); }
+.soft-shadow { box-shadow: 0 16px 44px rgba(17, 62, 49, .12); }
+.card-shadow { box-shadow: 0 10px 28px rgba(17, 62, 49, .08); }
+.map-grid { background-color: #edf4e9; background-image: linear-gradient(rgba(38, 117, 77, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(38, 117, 77, .08) 1px, transparent 1px); background-size: 28px 28px; }
+.pulse-dot { animation: pulse 1.7s infinite; }
+@keyframes pulse { 50% { transform: scale(1.42); opacity: .55; } }
+@media (max-width: 760px) { .content-width { width: min(100% - 28px, 1160px); } }

@@ -1,0 +1,1 @@
+"""AddisGo FastAPI service."""
