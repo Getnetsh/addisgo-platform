@@ -38,11 +38,15 @@ def health() -> dict[str, str]:
 
 @app.get("/api/v1/trips")
 def list_bookable_trips() -> list[dict]:
-    """Public schedule endpoint. Operator and stop joins can be added as schedules mature."""
+    """Public schedule endpoint with route and stop information for web and mobile."""
     response = (
         get_supabase()
         .table("trips")
-        .select("id,departure_at,arrival_at,fare_etb,coach_name,capacity,is_bookable")
+        .select(
+            "id,departure_at,arrival_at,fare_etb,coach_name,capacity,is_bookable,"
+            "route:routes(service_type,public_code,operator_name,"
+            "origin:origin_stop_id(name,city),destination:destination_stop_id(name,city))"
+        )
         .eq("is_bookable", True)
         .order("departure_at")
         .execute()

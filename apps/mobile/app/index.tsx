@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 const green = "#12634F";
@@ -18,9 +18,26 @@ const longTrips = [
 export default function HomeScreen() {
   const [service, setService] = useState<"city" | "long">("city");
   const [selected, setSelected] = useState<string | null>(null);
-  const trips = service === "city" ? cityTrips : longTrips;
+  const [remoteTrips, setRemoteTrips] = useState<typeof cityTrips | null>(null);
+  const trips = remoteTrips ?? (service === "city" ? cityTrips : longTrips);
   const from = service === "city" ? "Megenagna" : "Addis Ababa Terminal";
   const to = service === "city" ? "Mexico Square" : "Bahir Dar";
+
+  useEffect(() => {
+    const api = process.env.EXPO_PUBLIC_API_URL;
+    setRemoteTrips(null);
+    if (!api) return;
+    fetch(`${api}/api/v1/trips`).then((response) => response.ok ? response.json() : []).then((items: unknown[]) => {
+      const next = items.map((item: any) => ({
+        route: item.route?.service_type === "city" ? `Route ${item.route?.public_code ?? ""}` : `${item.route?.origin?.name ?? "Addis"} → ${item.route?.destination?.name ?? ""}`,
+        operator: item.route?.operator_name ?? "Partner operator",
+        time: new Date(item.departure_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        arrival: new Date(item.arrival_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        fare: String(item.fare_etb ?? 0), seats: `${item.capacity ?? 0} seats`, service: item.route?.service_type,
+      })).filter((trip: any) => trip.service === (service === "city" ? "city" : "intercity"));
+      if (next.length) setRemoteTrips(next);
+    }).catch(() => undefined);
+  }, [service]);
 
   return <SafeAreaView style={styles.safe}><ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
     <LinearGradient colors={[dark, green, "#16805F"]} style={styles.hero}>
