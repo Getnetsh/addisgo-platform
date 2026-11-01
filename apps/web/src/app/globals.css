@@ -26,7 +26,7 @@ button, input { font: inherit; }
 button { cursor: pointer; }
 .page-shell { overflow: hidden; }
 .content-width { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
-.hero-glow { background: radial-gradient(circle at 79% 14%, rgba(244, 196, 67, .25), transparent 27%), radial-gradient(circle at 100% 68%, rgba(107, 204, 157, .2), transparent 29%), linear-gradient(132deg, #0a4c3c 0%, #12634f 59%, #167b60 100%); }
+.hero-glow { background-image: linear-gradient(90deg, rgba(5, 46, 36, .97) 0%, rgba(7, 71, 54, .88) 42%, rgba(7, 71, 54, .28) 76%, rgba(7, 71, 54, .45) 100%), url('/images/addisgo-bus-hero.png'); background-position: center, center; background-size: cover, cover; }
 .soft-shadow { box-shadow: 0 16px 44px rgba(17, 62, 49, .12); }
 .card-shadow { box-shadow: 0 10px 28px rgba(17, 62, 49, .08); }
 .map-grid { background-color: #edf4e9; background-image: linear-gradient(rgba(38, 117, 77, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(38, 117, 77, .08) 1px, transparent 1px); background-size: 28px 28px; }

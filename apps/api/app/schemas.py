@@ -18,6 +18,15 @@ class BookingResponse(BaseModel):
     total_amount: Decimal
 
 
+class DemoSessionCreate(BaseModel):
+    phone: str = Field(pattern=r"^\+251\d{9}$")
+
+
+class DemoSessionResponse(BaseModel):
+    user_id: str
+    phone: str
+
+
 class TripResponse(BaseModel):
     id: str
     departure_at: datetime
