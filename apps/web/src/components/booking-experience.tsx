@@ -125,7 +125,7 @@ export default function BookingExperience() {
       if (!response.ok) throw new Error(readableError(data.detail ?? data, "Sign-in service is temporarily unavailable."));
       window.localStorage.setItem("addisgo-demo-user-id", data.user_id);
       window.localStorage.setItem("addisgo-demo-signed-in", "true");
-      setDemoSignedIn(true); showConfirmation("You are signed in", "Your rider account is ready. Choose a trip and seat to continue.");
+      setDemoSignedIn(true); 
       setAuthOpen(false); window.location.hash = "routes";
     } catch {
       // Keep the local demonstration usable if Supabase is temporarily unreachable.
@@ -133,7 +133,7 @@ export default function BookingExperience() {
       window.localStorage.setItem("addisgo-demo-user-id", demoUserId);
       window.localStorage.setItem("addisgo-demo-signed-in", "true");
       setDemoSignedIn(true);
-      showConfirmation("Demo sign-in complete", "Your test rider account is ready. Live Supabase sign-in will be used automatically when the service is available.");
+      
       setAuthStatus("Demo sign-in complete.");
       setAuthOpen(false);
       window.location.hash = "routes";
@@ -146,11 +146,11 @@ export default function BookingExperience() {
   }
 
   return <main className="page-shell min-h-screen bg-[var(--paper)]">
-    <header className="border-b border-white/10 bg-[var(--green-dark)] text-white">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-[var(--green-dark)]/95 text-white backdrop-blur">
       <div className="content-width flex h-18 items-center justify-between gap-5 py-3">
         <a className="flex items-center gap-2.5" href="#top" aria-label="AddisGo home"><span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--gold)] text-lg font-black text-[var(--green-dark)]">A</span><span className="text-xl font-bold tracking-tight">AddisGo</span></a>
         <nav className="hidden items-center gap-7 text-sm text-emerald-50 md:flex"><a className="transition hover:text-[var(--gold)]" href="#routes">{t.find}</a><a className="transition hover:text-[var(--gold)]" href="#how-it-works">{t.how}</a><a className="transition hover:text-[var(--gold)]" href="/ticket">{language === "EN" ? "My ticket" : "ቲኬቴ"}</a><a className="transition hover:text-[var(--gold)]" href="#support">{t.help}</a></nav>
-        <div className="flex items-center gap-2"><button aria-label="Switch language" className="rounded-lg border border-white/20 px-2.5 py-1.5 text-xs font-bold transition hover:bg-white/10" onClick={() => setLanguage(language === "EN" ? "አማ" : "EN")} type="button">{language === "EN" ? "አማ" : "EN"}</button><button className="rounded-lg bg-white px-3.5 py-2 text-sm font-bold text-[var(--green-dark)] transition hover:bg-emerald-50" onClick={() => { setAuthOpen(true); setAuthStatus(demoSignedIn ? "You are already signed in. You can continue booking." : ""); }} type="button">{demoSignedIn ? (language === "EN" ? "Account" : "መለያ") : t.signIn}</button></div>
+        <div className="flex items-center gap-2"><button aria-label="Switch language" className="rounded-lg border border-white/20 px-2.5 py-1.5 text-xs font-bold transition hover:bg-white/10" onClick={() => setLanguage(language === "EN" ? "አማ" : "EN")} type="button">{language === "EN" ? "አማ" : "EN"}</button><button className="rounded-lg bg-white px-3.5 py-2 text-sm font-bold text-[var(--green-dark)] transition hover:bg-emerald-50" onClick={() => { setAuthOpen(true); setAuthStatus(demoSignedIn ? "You are already signed in. You can continue booking." : ""); }} type="button">{demoSignedIn ? (language === "EN" ? "You are in" : "መለያ") : t.signIn}</button></div>
       </div>
     </header>
 
