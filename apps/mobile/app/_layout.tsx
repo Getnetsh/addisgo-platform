@@ -2,5 +2,10 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 export default function RootLayout() {
-  return <><StatusBar style="light" /><Stack screenOptions={{ headerShown: false }} /></>;
+  return (
+    <>
+      <StatusBar style="light" />
+      <Stack id="root" screenOptions={{ headerShown: false }} />
+    </>
+  );
 }

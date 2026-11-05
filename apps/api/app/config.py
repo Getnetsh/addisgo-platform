@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     supabase_url: str = ""
     supabase_service_role_key: str = ""
     allowed_origins: str = "http://localhost:3000,http://localhost:8081"
+    operator_access_key: str = ""
 
     model_config = SettingsConfigDict(
         env_file=Path(__file__).resolve().parent.parent / ".env",

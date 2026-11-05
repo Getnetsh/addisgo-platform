@@ -1,11 +1,18 @@
 {
   "name": "addisgo-platform",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev:web": "npm --workspace @addisgo/web run dev",
     "build:web": "npm --workspace @addisgo/web run build",
     "dev:mobile": "npm --workspace @addisgo/mobile run start",
     "lint:web": "npm --workspace @addisgo/web run lint"
+  },
+  "devDependencies": {
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   }
 }
