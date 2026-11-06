@@ -308,6 +308,152 @@ export function ReceiptCard({
     </Pressable>
   );
 }
+
+export function UpcomingTripCard({
+  ticket,
+  onOpenTicket,
+  onTrackBus,
+}: {
+  ticket: Ticket;
+  onOpenTicket: () => void;
+  onTrackBus: () => void;
+}) {
+  return (
+    <View style={styles.upcomingTripCard}>
+      <View style={styles.upcomingTripTopline}>
+        <View style={styles.upcomingLiveBadge}>
+          <View style={styles.upcomingLiveDot} />
+          <Text style={styles.upcomingLiveText}>TRAVEL PASS READY</Text>
+        </View>
+        <MaterialCommunityIcons name="bus-clock" color={green} size={23} />
+      </View>
+      <Text style={styles.upcomingTripRoute}>{ticket.route}</Text>
+      <Text style={styles.upcomingTripOperator}>{ticket.operator}</Text>
+      <View style={styles.upcomingTripDetails}>
+        <View>
+          <Text style={styles.upcomingTripKey}>DEPARTURE</Text>
+          <Text style={styles.upcomingTripValue}>{ticket.departure}</Text>
+        </View>
+        <View style={styles.upcomingDetailDivider} />
+        <View>
+          <Text style={styles.upcomingTripKey}>YOUR SEAT</Text>
+          <Text style={styles.upcomingTripValue}>{ticket.seat}</Text>
+        </View>
+        <View style={styles.upcomingDetailDivider} />
+        <View>
+          <Text style={styles.upcomingTripKey}>REFERENCE</Text>
+          <Text numberOfLines={1} style={styles.upcomingTripValue}>
+            {ticket.reference}
+          </Text>
+        </View>
+      </View>
+      <View style={styles.upcomingTripActions}>
+        <Pressable onPress={onTrackBus} style={styles.trackBusAction}>
+          <MaterialCommunityIcons name="crosshairs-gps" color="white" size={19} />
+          <Text style={styles.upcomingTripActionText}>Track bus</Text>
+        </Pressable>
+        <Pressable onPress={onOpenTicket} style={styles.openTicketAction}>
+          <MaterialCommunityIcons name="qrcode-scan" color={green} size={19} />
+          <Text style={styles.openTicketActionText}>Ticket</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+
+export function TripTrackingModal({
+  ticket,
+  onClose,
+}: {
+  ticket: Ticket | null;
+  onClose: () => void;
+}) {
+  const [from, to] = ticket?.route.includes("→")
+    ? ticket.route.split("→").map((place) => place.trim())
+    : ["Megenagna", "Mexico Square"];
+
+  return (
+    <Modal
+      transparent
+      animationType="slide"
+      visible={ticket !== null}
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalBackdrop}>
+        <View style={styles.tripTrackingModal}>
+          <View style={styles.trackingHandle} />
+          <View style={styles.trackingModalHeader}>
+            <View>
+              <Text style={styles.receiptLabel}>LIVE JOURNEY</Text>
+              <Text style={styles.trackingModalTitle}>Track your bus</Text>
+            </View>
+            <Pressable onPress={onClose} style={styles.trackingCloseButton}>
+              <MaterialCommunityIcons name="close" color={ink} size={22} />
+            </Pressable>
+          </View>
+          <View style={styles.trackingStatusCard}>
+            <View style={styles.trackingBusIcon}>
+              <MaterialCommunityIcons name="bus" color="white" size={28} />
+            </View>
+            <View style={styles.trackingStatusCopy}>
+              <Text style={styles.trackingStatusTitle}>Bus is on its route</Text>
+              <Text style={styles.trackingStatusText}>
+                Live location refreshes automatically while your bus is moving.
+              </Text>
+            </View>
+            <View style={styles.trackingEta}>
+              <Text style={styles.trackingEtaValue}>12 min</Text>
+              <Text style={styles.trackingEtaLabel}>ETA</Text>
+            </View>
+          </View>
+          <View style={styles.liveMapCard}>
+            <Text style={styles.liveMapLabel}>LIVE ROUTE</Text>
+            <Svg width="100%" height="112" viewBox="0 0 320 112">
+              <Path
+                d="M26 81 C72 23, 136 107, 190 49 S267 42, 296 28"
+                fill="none"
+                stroke="#0B7A45"
+                strokeDasharray="7 6"
+                strokeWidth="5"
+              />
+              <Circle cx="26" cy="81" fill="#0B7A45" r="10" />
+              <Circle cx="190" cy="49" fill="#F5B700" r="12" />
+              <Circle cx="296" cy="28" fill="#1565C0" r="10" />
+            </Svg>
+            <View style={styles.liveMapLabels}>
+              <Text numberOfLines={1} style={styles.liveMapPlace}>
+                {from}
+              </Text>
+              <Text style={styles.liveMapOnRoute}>Bus now</Text>
+              <Text numberOfLines={1} style={styles.liveMapPlace}>
+                {to}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.trackingInfoRow}>
+            <View>
+              <Text style={styles.trackingInfoKey}>DEPARTURE</Text>
+              <Text style={styles.trackingInfoValue}>{ticket?.departure}</Text>
+            </View>
+            <View>
+              <Text style={styles.trackingInfoKey}>YOUR SEAT</Text>
+              <Text style={styles.trackingInfoValue}>{ticket?.seat}</Text>
+            </View>
+            <View>
+              <Text style={styles.trackingInfoKey}>OPERATOR</Text>
+              <Text numberOfLines={1} style={styles.trackingInfoValue}>
+                {ticket?.operator}
+              </Text>
+            </View>
+          </View>
+          <Pressable onPress={onClose} style={styles.continueButton}>
+            <Text style={styles.continueButtonText}>Done</Text>
+          </Pressable>
+        </View>
+      </View>
+    </Modal>
+  );
+}
 export function BottomNavigation({
   active,
   onChange,
@@ -515,12 +661,16 @@ export function PaymentModal({
   visible,
   trip,
   seat,
+  totalFare,
+  passengers,
   onClose,
   onConfirm,
 }: {
   visible: boolean;
   trip: Trip | null;
   seat: string | null;
+  totalFare: string | null;
+  passengers: number;
   onClose: () => void;
   onConfirm: () => void;
 }) {
@@ -556,10 +706,11 @@ export function PaymentModal({
               <Text style={styles.paymentKey}>JOURNEY</Text>
               <Text style={styles.paymentRoute}>{trip?.route}</Text>
               <Text style={styles.paymentDetail}>
-                {trip?.operator} · Seat {seat}
+                {trip?.operator} · Seat {seat} · {passengers} passenger
+                {passengers === 1 ? "" : "s"}
               </Text>
             </View>
-            <Text style={styles.paymentFare}>{trip?.fare}</Text>
+            <Text style={styles.paymentFare}>{totalFare ?? trip?.fare}</Text>
           </View>
           <View style={styles.paymentMethod}>
             <View style={styles.telebirrMark}>
